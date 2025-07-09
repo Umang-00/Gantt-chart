@@ -1,0 +1,235 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {"name": "dataset"},
+  "params": [
+    {
+      "name": "todayDate",
+      "value": {"expr": "now()"}
+    }
+  ],
+  "transform": [
+    {
+      "calculate": "datum['Start date']",
+      "as": "startDate"
+    },
+    {
+      "calculate": "datum['Finish date']",
+      "as": "finishDate"
+    },
+    {
+      "calculate": "datum['Baseline start']",
+      "as": "baselineStart"
+    },
+    {
+      "calculate": "datum['Baseline finish']",
+      "as": "baselineFinish"
+    },
+    {
+      "calculate": "datum['Taskname']",
+      "as": "taskName"
+    },
+    {
+      "calculate": "datum['Percentage completion']",
+      "as": "percentageCompletion"
+    },
+    {
+      "calculate": "datum['Critical']",
+      "as": "critical"
+    },
+    {
+      "calculate": "datum['WBS']",
+      "as": "wbs"
+    },
+    {
+      "calculate": "datum.startDate + (datum.finishDate - datum.startDate) * (datum.percentageCompletion / 100)",
+      "as": "progressEnd"
+    }
+  ],
+  "vconcat": [
+    {
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "height": 8,
+            "cornerRadius": 2
+          },
+          "encoding": {
+            "x": {
+              "field": "baselineStart",
+              "type": "temporal",
+              "scale": {"nice": false},
+              "axis": {"title": "Timeline"}
+            },
+            "x2": {
+              "field": "baselineFinish",
+              "type": "temporal"
+            },
+            "y": {
+              "field": "taskName",
+              "type": "nominal",
+              "sort": {"field": "wbs", "order": "ascending"},
+              "axis": {"title": "Tasks"}
+            },
+            "color": {
+              "value": "#E0E0E0"
+            },
+            "opacity": {
+              "value": 0.7
+            },
+            "tooltip": [
+              {"field": "taskName", "type": "nominal", "title": "Task"},
+              {"field": "wbs", "type": "nominal", "title": "WBS"},
+              {"field": "baselineStart", "type": "temporal", "title": "Baseline Start"},
+              {"field": "baselineFinish", "type": "temporal", "title": "Baseline Finish"}
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "height": 12,
+            "cornerRadius": 2,
+            "yOffset": -6
+          },
+          "encoding": {
+            "x": {
+              "field": "startDate",
+              "type": "temporal"
+            },
+            "x2": {
+              "field": "finishDate",
+              "type": "temporal"
+            },
+            "y": {
+              "field": "taskName",
+              "type": "nominal",
+              "sort": {"field": "wbs", "order": "ascending"}
+            },
+            "color": {
+              "field": "critical",
+              "type": "nominal",
+              "scale": {
+                "domain": [true, false],
+                "range": ["#FF6B6B", "#4ECDC4"]
+              },
+              "legend": {
+                "title": "Critical Path",
+                "symbolType": "square"
+              }
+            },
+            "opacity": {
+              "value": 0.8
+            },
+            "tooltip": [
+              {"field": "taskName", "type": "nominal", "title": "Task"},
+              {"field": "wbs", "type": "nominal", "title": "WBS"},
+              {"field": "startDate", "type": "temporal", "title": "Start Date"},
+              {"field": "finishDate", "type": "temporal", "title": "Finish Date"},
+              {"field": "percentageCompletion", "type": "quantitative", "title": "% Complete", "format": ".0%"},
+              {"field": "critical", "type": "nominal", "title": "Critical"}
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "height": 12,
+            "cornerRadius": 2,
+            "yOffset": -6
+          },
+          "encoding": {
+            "x": {
+              "field": "startDate",
+              "type": "temporal"
+            },
+            "x2": {
+              "field": "progressEnd",
+              "type": "temporal"
+            },
+            "y": {
+              "field": "taskName",
+              "type": "nominal",
+              "sort": {"field": "wbs", "order": "ascending"}
+            },
+            "color": {
+              "field": "critical",
+              "type": "nominal",
+              "scale": {
+                "domain": [true, false],
+                "range": ["#FF4444", "#2ECC71"]
+              }
+            },
+            "opacity": {
+              "value": 1
+            },
+            "tooltip": [
+              {"field": "taskName", "type": "nominal", "title": "Task"},
+              {"field": "percentageCompletion", "type": "quantitative", "title": "Progress", "format": ".0%"}
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "dx": 5,
+            "fontSize": 10,
+            "fontWeight": "bold"
+          },
+          "encoding": {
+            "x": {
+              "field": "finishDate",
+              "type": "temporal"
+            },
+            "y": {
+              "field": "taskName",
+              "type": "nominal",
+              "sort": {"field": "wbs", "order": "ascending"}
+            },
+            "text": {
+              "field": "percentageCompletion",
+              "type": "quantitative",
+              "format": ".0%"
+            },
+            "color": {
+              "value": "#333333"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "rule",
+            "color": "#FF0000",
+            "strokeWidth": 2,
+            "strokeDash": [5, 5]
+          },
+          "encoding": {
+            "x": {
+              "param": "todayDate",
+              "type": "temporal"
+            },
+            "tooltip": [
+              {"value": "Today"}
+            ]
+          }
+        }
+      ],
+      "resolve": {
+        "scale": {
+          "color": "independent"
+        }
+      }
+    }
+  ],
+  "width": 800,
+  "height": 400,
+  "background": "#FFFFFF",
+  "title": {
+    "text": "Project Gantt Chart",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "anchor": "start"
+  }
+}
