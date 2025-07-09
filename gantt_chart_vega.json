@@ -39,10 +39,6 @@
     {
       "calculate": "datum['WBS']",
       "as": "wbs"
-    },
-    {
-      "calculate": "datum.startDate + (datum.finishDate - datum.startDate) * (datum.percentageCompletion / 100)",
-      "as": "progressEnd"
     }
   ],
   "vconcat": [
@@ -50,10 +46,25 @@
       "layer": [
         {
           "mark": {
+            "type": "rule",
+            "color": "#E8E8E8",
+            "strokeWidth": 1,
+            "opacity": 0.5
+          },
+          "encoding": {
+            "y": {
+              "field": "taskName",
+              "type": "nominal",
+              "sort": {"field": "wbs", "order": "ascending"}
+            }
+          }
+        },
+        {
+          "mark": {
             "type": "bar",
-            "height": 18,
-            "cornerRadius": 3,
-            "strokeWidth": 2
+            "height": 8,
+            "cornerRadius": 2,
+            "strokeWidth": 1
           },
           "encoding": {
             "x": {
@@ -66,7 +77,10 @@
                 "labelAngle": 0,
                 "labelAlign": "center",
                 "titleFontSize": 14,
-                "labelFontSize": 12
+                "labelFontSize": 12,
+                "grid": true,
+                "gridColor": "#F0F0F0",
+                "gridOpacity": 0.7
               }
             },
             "x2": {
@@ -82,7 +96,10 @@
                 "labelAlign": "left",
                 "labelFontSize": 12,
                 "labelLimit": 470,
-                "labelPadding": 10
+                "labelPadding": 10,
+                "grid": true,
+                "gridColor": "#E8E8E8",
+                "gridOpacity": 0.8
               }
             },
             "color": {
@@ -108,10 +125,10 @@
         {
           "mark": {
             "type": "bar",
-            "height": 18,
-            "cornerRadius": 3,
+            "height": 8,
+            "cornerRadius": 2,
             "yOffset": -10,
-            "strokeWidth": 2
+            "strokeWidth": 1
           },
           "encoding": {
             "x": {
@@ -144,26 +161,22 @@
               {"field": "wbs", "type": "nominal", "title": "WBS"},
               {"field": "startDate", "type": "temporal", "title": "Start Date"},
               {"field": "finishDate", "type": "temporal", "title": "Finish Date"},
-              {"field": "percentageCompletion", "type": "quantitative", "title": "% Complete", "format": ".0%"},
               {"field": "critical", "type": "nominal", "title": "Critical"}
             ]
           }
         },
         {
           "mark": {
-            "type": "bar",
-            "height": 18,
-            "cornerRadius": 3,
-            "yOffset": -10,
-            "strokeWidth": 2
+            "type": "text",
+            "align": "right",
+            "baseline": "middle",
+            "dx": -5,
+            "fontSize": 10,
+            "fontWeight": "normal"
           },
           "encoding": {
             "x": {
               "field": "startDate",
-              "type": "temporal"
-            },
-            "x2": {
-              "field": "progressEnd",
               "type": "temporal"
             },
             "y": {
@@ -171,22 +184,14 @@
               "type": "nominal",
               "sort": {"field": "wbs", "order": "ascending"}
             },
+            "text": {
+              "field": "startDate",
+              "type": "temporal",
+              "format": "%m/%d/%y"
+            },
             "color": {
-              "field": "critical",
-              "type": "nominal",
-              "scale": {
-                "domain": [true, false],
-                "range": ["#CC0000", "#B8860B"]
-              },
-              "legend": null
-            },
-            "opacity": {
-              "value": 1
-            },
-            "tooltip": [
-              {"field": "taskName", "type": "nominal", "title": "Task"},
-              {"field": "percentageCompletion", "type": "quantitative", "title": "Progress", "format": ".0%"}
-            ]
+              "value": "#666666"
+            }
           }
         },
         {
@@ -194,9 +199,9 @@
             "type": "text",
             "align": "left",
             "baseline": "middle",
-            "dx": 8,
-            "fontSize": 12,
-            "fontWeight": "bold"
+            "dx": 5,
+            "fontSize": 10,
+            "fontWeight": "normal"
           },
           "encoding": {
             "x": {
@@ -209,12 +214,72 @@
               "sort": {"field": "wbs", "order": "ascending"}
             },
             "text": {
-              "field": "percentageCompletion",
-              "type": "quantitative",
-              "format": ".0%"
+              "field": "finishDate",
+              "type": "temporal",
+              "format": "%m/%d/%y"
             },
             "color": {
-              "value": "#333333"
+              "value": "#666666"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "right",
+            "baseline": "middle",
+            "dx": -5,
+            "dy": 10,
+            "fontSize": 10,
+            "fontWeight": "normal"
+          },
+          "encoding": {
+            "x": {
+              "field": "baselineStart",
+              "type": "temporal"
+            },
+            "y": {
+              "field": "taskName",
+              "type": "nominal",
+              "sort": {"field": "wbs", "order": "ascending"}
+            },
+            "text": {
+              "field": "baselineStart",
+              "type": "temporal",
+              "format": "%m/%d/%y"
+            },
+            "color": {
+              "value": "#666666"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "baseline": "middle",
+            "dx": 5,
+            "dy": 10,
+            "fontSize": 10,
+            "fontWeight": "normal"
+          },
+          "encoding": {
+            "x": {
+              "field": "baselineFinish",
+              "type": "temporal"
+            },
+            "y": {
+              "field": "taskName",
+              "type": "nominal",
+              "sort": {"field": "wbs", "order": "ascending"}
+            },
+            "text": {
+              "field": "baselineFinish",
+              "type": "temporal",
+              "format": "%m/%d/%y"
+            },
+            "color": {
+              "value": "#666666"
             }
           }
         },
