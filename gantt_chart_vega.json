@@ -51,15 +51,23 @@
         {
           "mark": {
             "type": "bar",
-            "height": 8,
-            "cornerRadius": 2
+            "height": 18,
+            "cornerRadius": 3,
+            "strokeWidth": 2
           },
           "encoding": {
             "x": {
               "field": "baselineStart",
               "type": "temporal",
               "scale": {"nice": false},
-              "axis": {"title": "Timeline"}
+              "axis": {
+                "title": "Timeline",
+                "orient": "top",
+                "labelAngle": 0,
+                "labelAlign": "center",
+                "titleFontSize": 14,
+                "labelFontSize": 12
+              }
             },
             "x2": {
               "field": "baselineFinish",
@@ -69,13 +77,25 @@
               "field": "taskName",
               "type": "nominal",
               "sort": {"field": "wbs", "order": "ascending"},
-              "axis": {"title": "Tasks"}
+              "axis": {
+                "title": null,
+                "labelAlign": "left",
+                "labelFontSize": 12,
+                "labelLimit": 470,
+                "labelPadding": 10
+              }
             },
             "color": {
-              "value": "#E0E0E0"
+              "field": "critical",
+              "type": "nominal",
+              "scale": {
+                "domain": [true, false],
+                "range": ["#FF0000", "#0066CC"]
+              },
+              "legend": null
             },
             "opacity": {
-              "value": 0.7
+              "value": 0.8
             },
             "tooltip": [
               {"field": "taskName", "type": "nominal", "title": "Task"},
@@ -88,9 +108,10 @@
         {
           "mark": {
             "type": "bar",
-            "height": 12,
-            "cornerRadius": 2,
-            "yOffset": -6
+            "height": 18,
+            "cornerRadius": 3,
+            "yOffset": -10,
+            "strokeWidth": 2
           },
           "encoding": {
             "x": {
@@ -111,12 +132,9 @@
               "type": "nominal",
               "scale": {
                 "domain": [true, false],
-                "range": ["#FF6B6B", "#4ECDC4"]
+                "range": ["#FF0000", "#FFD700"]
               },
-              "legend": {
-                "title": "Critical Path",
-                "symbolType": "square"
-              }
+              "legend": null
             },
             "opacity": {
               "value": 0.8
@@ -134,9 +152,10 @@
         {
           "mark": {
             "type": "bar",
-            "height": 12,
-            "cornerRadius": 2,
-            "yOffset": -6
+            "height": 18,
+            "cornerRadius": 3,
+            "yOffset": -10,
+            "strokeWidth": 2
           },
           "encoding": {
             "x": {
@@ -157,8 +176,9 @@
               "type": "nominal",
               "scale": {
                 "domain": [true, false],
-                "range": ["#FF4444", "#2ECC71"]
-              }
+                "range": ["#CC0000", "#B8860B"]
+              },
+              "legend": null
             },
             "opacity": {
               "value": 1
@@ -174,8 +194,8 @@
             "type": "text",
             "align": "left",
             "baseline": "middle",
-            "dx": 5,
-            "fontSize": 10,
+            "dx": 8,
+            "fontSize": 12,
             "fontWeight": "bold"
           },
           "encoding": {
@@ -202,8 +222,8 @@
           "mark": {
             "type": "rule",
             "color": "#FF0000",
-            "strokeWidth": 2,
-            "strokeDash": [5, 5]
+            "strokeWidth": 3,
+            "strokeDash": [8, 4]
           },
           "encoding": {
             "x": {
@@ -223,12 +243,12 @@
       }
     }
   ],
-  "width": 800,
-  "height": 400,
+  "width": 1410,
+  "height": 735,
   "background": "#FFFFFF",
   "title": {
     "text": "Project Gantt Chart",
-    "fontSize": 16,
+    "fontSize": 18,
     "fontWeight": "bold",
     "anchor": "start"
   }
